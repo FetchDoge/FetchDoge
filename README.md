@@ -1,64 +1,67 @@
 # Marcus Richards
 
-**I build guardrails for AI agents: spending limits, expiring authority, and a receipt for every claim.**
-Calgary, Alberta 🇨🇦
+**I build guardrails for AI agents: the layer that decides what an agent may spend or do, for how long, and leaves a receipt either way.**
+Calgary, Alberta 🇨🇦 · open to AI-safety and agent-infrastructure roles (remote, Calgary or relocation)
 
-Agents are getting wallets, shells and credentials. I build the layer in between: what an agent is *allowed* to do, for how long, and what record it leaves. I prefer local-first tools with few dependencies, and READMEs that say what is proven and what isn't.
+I started building with AI in June 2026. I direct AI coding agents and make the design calls myself: what a system guarantees, how it fails, and what counts as proof. Every repo below says what is verified, what is in progress, and what is not claimed.
 
-## Flagship projects
+*Built by Marcus Richards, directing AI coding agents.*
 
-| Project | What it guarantees | Try it |
-|---|---|---|
-| [**Permit**](https://github.com/FetchDoge/permit) | Enforces spend caps, merchant allowlists, expiry, revocation and an e-stop between AI agents and PayPal. Every decision writes a hash-chained receipt | `python demo.py` (mock mode, no credentials, no network) |
-| [**Interlock**](https://github.com/FetchDoge/interlock) | Bounds agent authority with expiring leases, a global e-stop, a fault bus and provenance-stamped claims. The gate fails closed. Zero-dependency Python, installed from source (not on PyPI) | `git clone https://github.com/FetchDoge/interlock && cd interlock && pip install -e ".[test]" && pytest -q` |
-| [**Governor**](https://github.com/FetchDoge/governor) | Gates every agent action on an HMAC-signed, expiring permit, with a kill switch and a hash-chained receipt log | `pip install -e . && pytest -q` |
-| [**Receipt Sorter**](https://github.com/FetchDoge/receipt-sorter) | A local-first receipt sorter that shows its work: local Gemma extraction, a validation layer, and provenance on every ledger row. Stdlib-only Python | See the repo README for setup |
-| [**Reclamation Evidence Ledger**](https://github.com/FetchDoge/reclamation-evidence-ledger) | Watches Alberta orphan-well reclamation from orbit and stamps every claim with provenance, uncertainty and limits. Its README carries a 2026-10-09 notice: the screening results did not hold up under pre-registered testing | [live dashboard](https://FetchDoge.github.io/reclamation-evidence-ledger/) |
-| [**EP-AEC conformance**](https://github.com/FetchDoge/ep-aec-conformance) | Verifies EP-AEC evidence chains from the spec text alone and fails closed on every error. Building it exposed a bypass in the spec ([discussion](https://github.com/emiliaprotocol/emilia-protocol/issues/864)) | `python3 -m pytest tests/test_conformance.py` |
-| [**agentready**](https://github.com/FetchDoge/agentready) | Scores any website on how well AI agents can read, cite and operate it: 15 checks, one file, zero dependencies | `node scan.mjs yoursite.com` · [scan my site via an issue](https://github.com/FetchDoge/agentready/issues/new?title=Scan%20my%20site&body=My%20website%20is%3A%20https%3A%2F%2F) |
+## Permit: authority between AI agents and money
 
-> *Permit says what an agent may spend. Governor says what it may do. Interlock proves what it did.*
+[**Permit**](https://github.com/FetchDoge/permit) sits between an AI agent and PayPal. Before money moves it checks four clauses (budget, approved merchant, expiry, revocation), honours an e-stop, and writes a hash-chained receipt for every decision, allowed or blocked.
 
-<details>
-<summary>More: tools, specs, methods and research</summary>
+- **389 tests pass, 1 skipped** (`python -m pytest -q` at `21d7d7c`, matching green CI, Oct 15, 2026)
+- `python demo.py` runs the six-beat mock demo with no credentials and no network, and ends with `ledger chain: VERIFIED`
+- My entry in the [PayPal AI Hackathon](https://paypalaihackathon.devpost.com/), my first hackathon. The live sandbox run is still ahead, and the README says so.
 
-- [**Quote Rescue**](https://github.com/FetchDoge/quote-rescue): turns a contractor quote into a decision pack that says "I don't know" where the quote was silent ([live demo](https://FetchDoge.github.io/quote-rescue/))
-- [**Beacon**](https://github.com/FetchDoge/beacon): funding radar for Calgary, Alberta and Canada builders; every program carries a claim tier ([live](https://FetchDoge.github.io/beacon/))
-- [**Exhibit**](https://github.com/FetchDoge/exhibit): defensive OSINT that refuses out-of-scope targets unless attested; every finding is a sourced, tiered claim
-- [**Sovereign Contracts**](https://github.com/FetchDoge/sovereign-contracts): a local Hardhat 3 compile/test/coverage/deploy path with invariant tests, no cloud accounts
-- [**Star Lab**](https://github.com/FetchDoge/star-lab): a local control plane for coding agents with memory, a deny list under always-approve, and a health doctor
-- [**IntentSpec**](https://github.com/FetchDoge/intent-spec): a typed IR that compiles operator intent into existing agent machinery
-- [**The Adversarial Seat**](https://github.com/FetchDoge/adversarial-seat): a standing red-team method for agent-built work, with a worked example
-- [**The Register**](https://github.com/FetchDoge/the-register): this account's public-repo register, compiled from named checks
-- [**Agent Job Board**](https://github.com/FetchDoge/agent-job-board): run AI agents like a company — roles, project gates, and an append-only ledger
-- [**interlock-forensics**](https://github.com/FetchDoge/interlock-forensics): pre-registration for the AEGIS Day-30 provenance gate
-- [**Hermes Refuse**](https://github.com/FetchDoge/hermes-refuse): design spec (no code yet) for a macOS execution layer that refuses ambiguous agent actions
-- [**honestyield.dev**](https://github.com/FetchDoge/honestyield.dev): the honest-yield rule, "no pair, no number"
+## The lineage: how Permit got here
 
-</details>
+| | Repo | What it guarantees | Proof |
+|---|---|---|---|
+| Sep 27 | [**Interlock**](https://github.com/FetchDoge/interlock) | Authority is leased, not owned. Leases expire, a global e-stop revokes everything, and faults fail closed. Zero dependencies. | 68 tests, CI on Python 3.11–3.13 |
+| Oct 2 | [**Permit**](https://github.com/FetchDoge/permit) | Interlock's leased-authority model applied to payments | 389 tests |
+| Oct 6 | [**Governor**](https://github.com/FetchDoge/governor) | The same gate for *any* agent action: HMAC-signed expiring permits, a kill switch, a hash-chained receipt log and a signed forensics bundle | 27 tests |
+
+> *Permit says what an agent may spend. Governor says what it may do. Interlock says for how long.*
+
+**Outside check:** [**ep-aec-conformance**](https://github.com/FetchDoge/ep-aec-conformance) is a verifier for the IETF EP-AEC authorization-evidence draft, written from the spec text alone. It fails closed on every error, with 64 vectors (56 against -02, plus 8 selected -07 regressions). Writing it surfaced a defect in an older revision (-02), which the spec's maintainers confirmed. It had already been fixed in -03 ([discussion](https://github.com/emiliaprotocol/emilia-protocol/issues/864)).
 
 ## How I build
 
 1. **Fail closed.** When something is ambiguous, deny and record why.
-2. **Claims carry receipts.** A README says what is verified, what is in progress, and what is not claimed.
+2. **Claims carry receipts.** Numbers in a README come with the command, the commit and the date.
 3. **Agents don't hold credentials.** The authority check sits between intent and money.
+4. **Attack your own work.** Merges are pinned to the reviewed commit, and a red-team method ([adversarial-seat](https://github.com/FetchDoge/adversarial-seat)) is chartered to change or kill agent-built work before it ships.
 
-## Evidence
+## Also built
 
-Every number below was checked against a live run or the project record on the date shown:
+- [**agentready**](https://github.com/FetchDoge/agentready): scores how well AI agents can read, cite and operate a website. 15 checks, one file, zero dependencies, with tests in CI ([live](https://FetchDoge.github.io/agentready/))
+- [**Receipt Sorter**](https://github.com/FetchDoge/receipt-sorter): local-first receipt-to-ledger CLI with a validation layer that refuses to guess and provenance on every row. Stdlib-only Python. The demo got 15 of 15 fields right on 3 sample fixtures.
+- [**Quote Rescue**](https://github.com/FetchDoge/quote-rescue): turns a contractor estimate into a decision pack that says "I don't know" where the quote is silent ([live demo](https://FetchDoge.github.io/quote-rescue/))
+- [**Reclamation Evidence Ledger**](https://github.com/FetchDoge/reclamation-evidence-ledger): Sentinel-2 change detection on Alberta orphan-well sites. The README publishes that its screening results did **not** hold up under pre-registered testing ([dashboard](https://FetchDoge.github.io/reclamation-evidence-ledger/))
+- [**Beacon**](https://github.com/FetchDoge/beacon) · [**Exhibit**](https://github.com/FetchDoge/exhibit) · [**Porcupine**](https://github.com/FetchDoge/porcupine): a funding radar, defensive OSINT and a defence-tender radar, each of which labels how every claim was sourced
 
-- **Permit:** 389 tests passed, 1 skipped (390 collected), in a full suite run at commit `21d7d7c`, matching the green CI run on that commit, 2026-10-15.
-- **EP-AEC conformance:** 64 test vectors; 64/64 passed against the -07 draft, with the result confirmed by the specification's author, 2026-10-13.
-- **Receipt Sorter:** demo verified 2026-10-13 — 15 of 15 fields correct across 3 sample fixtures (see the repo's `demo/RESULTS.md`).
+<details>
+<summary>Methods and specs</summary>
 
-Numbers that could not be re-verified are not listed. Each repo's README cites where its own numbers come from.
+- [**The Register**](https://github.com/FetchDoge/the-register): this account's public-repo register, compiled from named checks, with a pre-push gate
+- [**IntentSpec**](https://github.com/FetchDoge/intent-spec): a typed IR that compiles operator intent into existing agent machinery; the validator rejects drift
+- [**interlock-forensics**](https://github.com/FetchDoge/interlock-forensics): a pre-registered provenance gate, one SHA-256-checkable file at a public tag
+- [**agent-provenance-benchmark**](https://github.com/FetchDoge/agent-provenance-benchmark): a pre-registered provenance benchmark of ten popular agent frameworks, with a frozen rubric and two-lane sealed scoring
+- [**Hermes Refuse**](https://github.com/FetchDoge/hermes-refuse): a design spec (no code yet) for a macOS execution layer that refuses ambiguous agent actions
+- [**honestyield.dev**](https://github.com/FetchDoge/honestyield.dev): the honest-yield rule: no admitted before-and-after run pair, no savings number
 
-## Now
+</details>
 
-- **Permit** for the [PayPal AI Hackathon](https://paypalaihackathon.devpost.com/) (deadline Nov 12, 2026)
-- **Receipt Sorter** — released 2026-10-13: [repo](https://github.com/FetchDoge/receipt-sorter)
-- **[interlock-forensics](https://github.com/FetchDoge/interlock-forensics)**: pre-registered provenance benchmark, gate 2026-10-27
+## Foundations (June–August 2026)
+
+The first two months were for learning how agents, builds and gates actually behave. Three lessons from them still hold up everything above:
+
+- [**sovereign-contracts**](https://github.com/FetchDoge/sovereign-contracts) (Jul 27): I gated my own Hardhat compile/test/deploy path with Python checks. **Lesson:** a gate is only real if it can say no. That became fail-closed.
+- [**star-lab**](https://github.com/FetchDoge/star-lab) (Aug 4): I ran and compared coding agents locally behind safety hooks and a health doctor. **Lesson:** an agent should never hold authority it can't lose. That became Interlock's leases, then Permit and Governor.
+- [**fetchdoge-warehouse-system**](https://github.com/FetchDoge/fetchdoge-warehouse-system) and [**agent-job-board**](https://github.com/FetchDoge/agent-job-board): naming, audit and project-gate conventions for agent-built work. **Lesson:** if it isn't recorded, it didn't happen. That became the receipts.
 
 ## Get in touch
 
-Found a bug or have a question? Open an issue on the relevant repo. For anything else: [contact@marcusrichards.dev](mailto:contact@marcusrichards.dev).
+Open an issue on the relevant repo, or email [contact@marcusrichards.dev](mailto:contact@marcusrichards.dev).
