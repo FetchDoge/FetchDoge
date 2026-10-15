@@ -47,7 +47,7 @@ Agents are getting wallets, shells and credentials. I build the layer in between
 
 Every number below was checked against a live run or the project record on the date shown:
 
-- **Permit:** 344 tests passed in a full live suite run, 2026-10-13.
+- **Permit:** 389 tests passed, 1 skipped (390 collected), in a full suite run at commit `21d7d7c`, matching the green CI run on that commit, 2026-10-15.
 - **EP-AEC conformance:** 64 test vectors; 64/64 passed against the -07 draft, with the result confirmed by the specification's author, 2026-10-13.
 - **Receipt Sorter:** demo verified 2026-10-13 — 15 of 15 fields correct across 3 sample fixtures (see the repo's `demo/RESULTS.md`).
 
